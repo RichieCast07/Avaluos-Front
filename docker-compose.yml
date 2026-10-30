@@ -1,0 +1,18 @@
+# Desarrollo local completo: PostgreSQL + backend. El frontend se corre con "npm run dev" en /frontend.
+services:
+  db:
+    image: postgres:16
+    environment: { POSTGRES_USER: avaluos, POSTGRES_PASSWORD: avaluos, POSTGRES_DB: avaluos }
+    volumes: [pgdata:/var/lib/postgresql/data]
+  api:
+    build: ./backend
+    depends_on: [db]
+    ports: ["8000:8000"]
+    environment:
+      DATABASE_URL: postgresql://avaluos:avaluos@db:5432/avaluos
+      SECRET_KEY: desarrollo-solamente-cambiar-en-produccion
+      ADMIN_EMAIL: admin@avaluos.local
+      ADMIN_PASSWORD: cambiar123
+      FRONTEND_URL: http://localhost:5173
+    volumes: [archivos:/data]
+volumes: { pgdata: {}, archivos: {} }
